@@ -8,9 +8,7 @@
  * 页面再用**实时目录列表**跟快照做体检，数量不一致就提示重跑本脚本，不假装信息是最新的。
  *
  * 用法（在**本包目录**下跑，或直接 node <本文件>）：
- *   node tools/refresh-snapshots.mjs            # 技能 + 记忆都快照
- *   node tools/refresh-snapshots.mjs --skills   # 只刷技能
- *   node tools/refresh-snapshots.mjs --memory   # 只刷记忆
+ *   node tools/refresh-snapshots.mjs            # 刷技能快照（本包只有技能这一份快照）
  *   DSH_HOME=/path/to/data node tools/refresh-snapshots.mjs
  *
  * 数据来源（都可移植，不写死安装路径）：`$DSH_HOME/skills`、`$DSH_HOME/memory`、
@@ -204,9 +202,9 @@ async function refreshMemory() {
 	console.log(`记忆快照：${atoms.length} 条原子 / ${edges.length} 条关系 / ${types.length} 个类型 → 已注入 ${TARGET}`);
 }
 
+// 本包**只有技能快照**（记忆库页在 dsh-workbench-memory 包里，那一份快照由它的 tools/refresh-snapshots.mjs 灌）
+// —— 拆包以后每个包只负责自己的快照，所以这里不再有"记忆那一步"。
 const args = new Set(process.argv.slice(2));
-const onlySkills = args.has("--skills") && !args.has("--memory");
-const onlyMemory = args.has("--memory") && !args.has("--skills");
 console.log(`DSH_HOME = ${PATHS.dshHome}（来自 ${PATHS.source}）`);
-if (!onlyMemory) refreshSkills();
-if (!onlySkills) await refreshMemory();
+if (args.has("--memory")) console.log("本包不含记忆快照（记忆库页在 dsh-workbench-memory 包里）；--memory 被忽略。");
+refreshSkills();

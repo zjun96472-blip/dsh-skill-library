@@ -7,17 +7,13 @@
 #
 # 本包**不动**任何官方行（不抢 sidebar.brand.* 单值插槽，所以没有 disabled 行）；
 # 目标行不存在时 Loader 只给一条 warning，不会失败。
+#
+# 也**没有页面开关**：一行 = 一个包 = 一页（或多页），开关那一套（`pages.*`）已经删掉 ——
+# 上一版靠它"同一份整页代码复制四份、只开一页"，几个包一起装就会互相覆盖。
 
 - insert:
-    # 主机半边（本包的 main）：把页面开关下发到页面；同一个包还提供客户端半边
-    # （`exports["./client"]` = lib/client.js）。
+    # 主机半边（本包的 main）；同一个包还提供客户端半边（`exports["./client"]` = lib/client.js）。
     - id: skill-library
       name: dsh-skill-library
       config:
         dshHome: ""
-        pages:
-          home: false
-          memory: false
-          audition: false
-          planBook: false
-          skillLibrary: true
